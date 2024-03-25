@@ -34,6 +34,8 @@ namespace Class_to_Mediator_Structure
         StringBuilder stringBuilder3 = new StringBuilder();
         StringBuilder stringBuilder4 = new StringBuilder();
         StringBuilder stringBuilder5 = new StringBuilder();
+        StringBuilder stringBuilder6 = new StringBuilder();
+        StringBuilder stringBuilder7 = new StringBuilder();
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -41,6 +43,10 @@ namespace Class_to_Mediator_Structure
             Directory.CreateDirectory("Queries");
             Directory.CreateDirectory("Handlers");
             Directory.CreateDirectory("Results");
+            Directory.CreateDirectory("Dtos");
+            Directory.CreateDirectory("Dtos//"+textBox2.Text+"Dtos");
+            Directory.CreateDirectory("Views");
+            Directory.CreateDirectory("Views//Admin"+textBox2.Text);
 
             Directory.CreateDirectory("Commands//" + textBox2.Text + "Commands");
             Directory.CreateDirectory("Queries//" + textBox2.Text + "Queries");
@@ -79,8 +85,19 @@ namespace Class_to_Mediator_Structure
                     "}"
 
                     );
+                if (i != 2)
+                {
 
+                File.WriteAllText("Dtos//" + textBox2.Text + "Dtos" + "//" + commands[i] + textBox2.Text + "Dto.cs",
+                                       "namespace " + textBox1.Text + ".Dtos." + textBox2.Text + "Dtos\n" +
+                                                          "{\n" +
+                                                                             "    public class "+ commands[i] + textBox2.Text + "Dto\n" +
+                                                                                                "    {\n" + stringBuilder + "\n" +
+                                                                                                                   "    }\n" +
+                                                                                                                                      "}\n"
+                                                                                                                                                         );
 
+                }
 
 
 
@@ -243,6 +260,13 @@ namespace Class_to_Mediator_Structure
                          ,
                          $"namespace {textBox1.Text}.Application.Features.Mediator.Results.{textBox2.Text}Results\r\n{{\r\n    public class Get{textBox2.Text}QueryResult\r\n    {{"+richTextBox1.Text+$"" +
                          $"    }}\r\n}}\r\n");
+                    File.WriteAllText("Dtos//" + textBox2.Text + "Dtos" + "//" + "Result" + textBox2.Text + "Dto.cs",
+                                                              "namespace " + textBox1.Text + ".Dtos." + textBox2.Text + "Dtos\n" +
+                                                                                                                       "{\n" +
+                                                                                                                                                                                                   "    public class Result" + textBox2.Text + "Dto\n" +
+                                                                                                                                                                                                                                                                                                  "    {\n" + richTextBox1.Text + "\n" +
+                                                                                                                                                                                                                                                                                                                                                                                                                    "    }\n" +
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         "}\n");
                 }
                 if (i == 1)
                 {
@@ -253,6 +277,84 @@ namespace Class_to_Mediator_Structure
                         $"}}\r\n}}\r\n");
                 }
             }
+
+
+            for (int i = 0; i < richTextBox1.Lines.Length; i++)
+            {
+                if (i != 0)
+                {
+                    stringBuilder6.Append("<th>" + richTextBox1.Lines[i].Split(' ')[2].ToString() + "</th>\n");
+                    stringBuilder7.Append("<td>@item." + richTextBox1.Lines[i].Split(' ')[2].ToString() + "</td>\n");
+
+                }
+            }
+
+
+           string main= " @using "+textBox1.Text+".Dtos."+textBox2.Text+"Dtos\n" +
+ "@model List<Result"+textBox2.Text+"Dto> \n" +
+ "@{\n" +
+ "    ViewData[\"Title\"] = \"Index\";\n" +
+ "    Layout = \"~/Views/AdminLayout/Index.cshtml\";\n" +
+ "    int count = 1;\n" +
+ "}\n" +
+
+ "< !-- Plugins css -->\n" +
+ "< link href=\"~/Admin/plugins/datatables/dataTables.bootstrap4.css\" rel=\"stylesheet\" type=\"text/css\" />\n" +
+ "<link href=\"~/Admin/plugins/datatables/responsive.bootstrap4.css\" rel=\"stylesheet\" type=\"text/css\" />\n" +
+ "<link href=\"~/Admin/plugins/datatables/buttons.bootstrap4.css\" rel=\"stylesheet\" type=\"text/css\" />\n" +
+ "<link href=\"~/Admin/plugins/datatables/select.bootstrap4.css\" rel=\"stylesheet\" type=\"text/css\" />\n" +
+
+ "< div class=\"page-content\">\n" +
+ "    <div class=\"container-fluid\">\n" +
+
+ "        < !-- start page title -->\n" +
+ "        < div class=\"row\">\n" +
+ "            <div class=\"col-12\">\n" +
+ "                <div class=\"card\">\n" +
+ "                    <div class=\"card-body\">\n" +
+ "                        <h4 class=\"card-title\">"+textBox2.Text+"</h4>\n" +
+ "                        <p class=\"card-subtitle mb-4\">\n" +
+ "                            "+textBox2.Text+" bu kısımda görüntüleyebilirsiniz.\n" +
+
+ "                        </p>\n" +
+
+ "                        <table id=\"basic-datatable\" class=\"table dt-responsive\">\n" +
+ "                            <thead>\n" +
+ "                                <tr>\n" +
+ "                                    <th>#</th>\n" +stringBuilder6.ToString()+"\n"+                                 
+ "                                    <th>Güncelle</th>\n" +
+ "                                    <th>Kaldır</th>\n" +
+ "                                    <th></th>\n" +
+ "                                </tr>\n" +
+ "                            </thead>\n" +
+
+ "                            <tbody>\n" +
+ "                                @foreach (var item in Model)\n" +
+ "                                {\n" +
+
+ "                                    <tr>\n" +
+ "                                        <td>@count</td>\n" + stringBuilder7.ToString()+"\n"+                                     
+ "                                        <td><a href=\"/User/Update"+textBox2.Text+"/@item.Id\" class=\"btn btn-success\">Güncelle</a></td>\n" +
+ "                                        <td><a href=\"/User/Remove"+textBox2.Text+"/@item.Id\" class=\"btn btn-danger\">Kaldır</a></td>\n" +
+ "                                        <td></td>\n" +
+
+ "                                    </tr>\n" +
+ "                                    count++;\n" +
+ "                                }\n" +
+ "                            </tbody>\n" +
+ "                        </table>\n" +
+
+ "                    </div> <!-- end card body-->\n" +
+ "                </div> <!-- end card -->\n" +
+ "            </div><!-- end col-->\n" +
+ "        </div>\n" +
+ "        < !-- end page title -->\n" +
+
+ "    </div> <!-- container-fluid -->\n" +
+ "</div>";
+
+            File.WriteAllText("Views//Admin" + textBox2.Text + "//Index.cshtml", main);
+
         }
     }
 }
